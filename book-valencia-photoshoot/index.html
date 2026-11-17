@@ -323,7 +323,7 @@ function view1(){
   var h='<div class="ob-card">'+bar()+'<h2>'+esc(t('choose_session'))+'</h2>';
   var list=S.cfg.sessions.slice().sort(function(a,b){return (b.perPerson?1:0)-(a.perPerson?1:0)});
   list.forEach(function(s){
-    h+='<button type="button" class="ob-opt'+(s.perPerson?' ob-xm':'')+'" data-s="'+s.id+'" aria-pressed="'+(S.session&&S.session.id===s.id)+'"><b><span>'+esc(sN(s))+(s.perPerson?' <i class="ob-badge">'+esc(t('xmas_deal'))+'</i>':'')+'</span><span>'+priceHTML(s)+'</span></b><small>'+s.minutes+' min · '+esc(ppl(s))+(s.perPerson?' · '+esc(t('xmas_season')):'')+'</small></button>';
+    h+='<button type="button" class="ob-opt'+(s.perPerson?' ob-xm':'')+'" data-s="'+s.id+'" aria-pressed="'+(S.session&&S.session.id===s.id)+'"><b><span>'+esc(sN(s))+(s.perPerson?' <i class="ob-badge">'+esc(t('xmas_deal'))+'</i>':'')+'</span><span>'+priceHTML(s)+'</span></b><small>'+(s.minutes===60?'1 h':s.minutes+' min')+' · '+esc(ppl(s))+(s.perPerson?' · '+esc(t('xmas_season')):'')+'</small></button>';
   });
   if(S.session){
     h+='<span class="ob-label">'+esc(t('route'))+'</span><div class="ob-chips">';
