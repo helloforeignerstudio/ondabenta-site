@@ -17,7 +17,10 @@ h1{font-size:clamp(40px,8vw,104px)}h2{font-size:clamp(30px,5vw,60px)}h3{font-siz
 .sec{padding:clamp(56px,9vw,120px) 0}
 .bone{background:var(--bone)}.steel{background:var(--steel)}.coffee{background:var(--coffee);color:var(--bone)}.bone2{background:var(--bone2)}
 .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;margin:0 0 16px;opacity:.75}
-.nav{position:sticky;top:0;z-index:20;background:rgba(227,216,194,.94);backdrop-filter:blur(8px)}
+.nav{position:absolute;top:0;left:0;right:0;z-index:20;background:transparent}
+.nav.over,.nav.over a:not(.btn){color:var(--bone)}.nav.over .btn{background:var(--bone);color:var(--coffee);border-color:var(--bone)}.nav.over .menu{color:var(--bone);border-color:var(--bone)}
+main.pt{padding-top:68px}
+.hero:before{content:"";position:absolute;inset:0 0 auto 0;height:160px;background:linear-gradient(to bottom,rgba(58,40,28,.55),transparent);z-index:1}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
 .logo{font-weight:500;text-transform:uppercase;letter-spacing:-.03em;font-size:22px;text-decoration:none}
 .nav nav{display:flex;gap:26px;align-items:center;font-family:Poppins,'Helvetica Neue',sans-serif;font-size:14px}
@@ -70,7 +73,7 @@ footer ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}.small{font-si
 </style></head><body>
 <header class="nav"><div class="wrap"><a class="logo" href="/ondabenta-site/" aria-label="Onda Benta, home"><img src="/ondabenta-site/img/logo-coffee.png" alt="Onda Benta" width="120" height="64" style="height:52px;width:auto"></a><button class="menu" aria-label="Open menu" onclick="document.getElementById('ovl').classList.add('open')">≡</button><nav><a href="/ondabenta-site/#sessions">Sessions</a><a href="/ondabenta-site/gallery/">Gallery</a><a href="/ondabenta-site/about/">About</a><a href="/ondabenta-site/faq/">FAQ</a><a class="btn" href="/ondabenta-site/book-valencia-photoshoot/" style="min-height:42px;padding:0 22px">Book now</a></nav></div></header>
 <div id="ovl" class="ovl"><div class="top"><img src="/ondabenta-site/img/logo-bone.png" alt="Onda Benta" width="120" height="64" style="height:52px;width:auto"><button class="menu" style="color:var(--bone);border-color:var(--bone)" aria-label="Close menu" onclick="document.getElementById('ovl').classList.remove('open')">×</button></div><ul><li><a href="/ondabenta-site/#sessions" onclick="document.getElementById('ovl').classList.remove('open')"><b>Sessions</b><small>couple · family · solo</small></a></li><li><a href="/ondabenta-site/gallery/" onclick="document.getElementById('ovl').classList.remove('open')"><b>Gallery</b><small>filter by story</small></a></li><li><a href="/ondabenta-site/photoshoot-locations-valencia/" onclick="document.getElementById('ovl').classList.remove('open')"><b>Locations</b><small>where we shoot</small></a></li><li><a href="/ondabenta-site/about/" onclick="document.getElementById('ovl').classList.remove('open')"><b>About</b><small>Fábio</small></a></li><li><a href="/ondabenta-site/faq/" onclick="document.getElementById('ovl').classList.remove('open')"><b>FAQ</b><small>rain, photos, rules</small></a></li><li><a href="https://wa.me/34659650361" onclick="document.getElementById('ovl').classList.remove('open')"><b>Contact</b><small>WhatsApp</small></a></li></ul><a class="btn" href="/ondabenta-site/book-valencia-photoshoot/">Book your session</a><p><a href="https://www.instagram.com/ondabenta/">Instagram</a> · <a href="https://wa.me/34659650361">WhatsApp</a></p></div>
-<main><section class="sec bone"><div class="wrap"><p class="eyebrow">Reservations</p><h1 style="font-size:clamp(36px,6vw,80px)">Booking</h1><!-- ONDA BENTA booking widget · paste into a Squarespace Code Block (HTML) -->
+<main class="pt"><section class="sec bone"><div class="wrap"><p class="eyebrow">Reservations</p><h1 style="font-size:clamp(36px,6vw,80px)">Booking</h1><!-- ONDA BENTA booking widget · paste into a Squarespace Code Block (HTML) -->
 <div id="ob-booking" aria-live="polite"></div>
 <style>
 #ob-booking{--bone:#E3D8C2;--bone2:#EFE7D6;--steel:#97A7B7;--coffee:#3A281C;--mid:#4A3628;font-family:'Helvetica Neue',Arial,sans-serif;color:var(--coffee);max-width:760px;margin:0 auto;box-sizing:border-box}
@@ -95,6 +98,8 @@ footer ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}.small{font-si
 #ob-booking .ob-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
 #ob-booking .ob-cal span{font-size:12px;color:var(--mid)}
 #ob-booking .ob-day{border:0;border-radius:16px;min-height:44px;background:#fff8;color:var(--coffee);font:inherit;cursor:pointer}
+#ob-booking .sk{background:rgba(58,40,28,.08);color:transparent;border-color:transparent;border-radius:16px;min-height:44px;display:flex;align-items:center;justify-content:center;animation:obp 1.1s ease-in-out infinite}
+@keyframes obp{50%{opacity:.45}}
 #ob-booking .ob-day[disabled]{background:transparent;color:rgba(58,40,28,.35);text-decoration:line-through;cursor:default}
 #ob-booking .ob-day[aria-pressed=true]{background:var(--coffee);color:var(--bone)}
 #ob-booking .ob-month{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px}
@@ -115,7 +120,8 @@ footer ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}.small{font-si
 (function(){
 var API='https://script.google.com/macros/s/AKfycbzpkz1VaMfltdFXo5XmGANYX3hy32Vl5fYb2D20h5FnvcJd3t7RV7-h9qmegVqreZOj/exec';
 var root=document.getElementById('ob-booking');
-var S={step:1,cfg:null,session:null,route:null,people:null,month:null,days:{},date:null,slots:[],time:null,lang:'en',err:'',busy:false};
+var MC={},CFGK='obcfg2';
+var S={loading:false,step:1,cfg:null,session:null,route:null,people:null,month:null,days:{},date:null,slots:[],time:null,lang:'en',err:'',busy:false};
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function api(q){return fetch(API+'?'+q).then(function(r){return r.json()})}
@@ -153,10 +159,11 @@ function view2(){
   DN.forEach(function(d){h+='<span>'+d+'</span>'});
   for(var i=0;i<lead;i++)h+='<span></span>';
   for(var d=1;d<=n;d++){var ds=S.month+'-'+pad(d),c=S.days[ds]||0;
+    if(S.loading){h+='<span class="ob-day sk">'+d+'</span>';continue}
     h+='<button type="button" class="ob-day" data-d="'+ds+'" '+(c>0?'':'disabled')+' aria-pressed="'+(S.date===ds)+'">'+d+'</button>';}
   h+='</div>';
   if(S.date){h+='<span class="ob-label">Pick a time · '+esc(S.date)+'</span><div class="ob-chips">';
-    if(!S.slots.length)h+='<span>No times left that day.</span>';
+    if(S.slotsLoading)h+='<span class="ob-chip sk" style="width:76px">&nbsp;</span><span class="ob-chip sk" style="width:76px">&nbsp;</span><span class="ob-chip sk" style="width:76px">&nbsp;</span>';else if(!S.slots.length)h+='<span>No times left that day.</span>';
     S.slots.forEach(function(t){h+='<button type="button" class="ob-chip" data-t="'+t+'" aria-pressed="'+(S.time===t)+'">'+t+'</button>'});
     h+='</div>';}
   h+='<p style="font-size:13px;color:var(--mid);margin:14px 0 0">Times are in Valencia time. Crossed-out days are fully booked.</p>'+err()+
@@ -203,7 +210,7 @@ function wire(){
   on('[data-r]','click',function(){S.route=this.getAttribute('data-r');paint()});
   on('[data-p]','click',function(){S.people=+this.getAttribute('data-p');paint()});
   var n1=root.querySelector('#n1');if(n1)n1.onclick=function(){S.err='';var t=new Date();S.month=t.getFullYear()+'-'+pad(t.getMonth()+1);S.step=2;loadMonth()};
-  on('[data-d]','click',function(){S.date=this.getAttribute('data-d');S.time=null;S.slots=[];paint();api('action=slots&session='+S.session.id+'&date='+S.date).then(function(r){S.slots=r.slots||[];paint()})});
+  on('[data-d]','click',function(){S.date=this.getAttribute('data-d');S.time=null;var m=MC[S.month];if(m&&m.slots){S.slots=m.slots[S.date]||[];paint()}else{S.slots=[];S.slotsLoading=true;paint();api('action=slots&session='+S.session.id+'&date='+S.date).then(function(r){S.slots=r.slots||[];S.slotsLoading=false;paint()})}});
   on('[data-t]','click',function(){S.time=this.getAttribute('data-t');paint()});
   var pm=root.querySelector('#pm'),nm=root.querySelector('#nm');
   if(pm)pm.onclick=function(){shift(-1)};if(nm)nm.onclick=function(){shift(1)};
@@ -216,7 +223,24 @@ function wire(){
 }
 
 function shift(d){var p=S.month.split('-'),dt=new Date(+p[0],+p[1]-1+d,1);S.month=dt.getFullYear()+'-'+pad(dt.getMonth()+1);loadMonth()}
-function loadMonth(){S.days={};paint();api('action=month&session='+S.session.id+'&month='+S.month).then(function(r){S.days=r.days||{};paint()}).catch(function(){S.err='Could not load dates. Please try again.';paint()})}
+function monthFetch(mo,force){
+  if(MC[mo]&&!force)return MC[mo].p||Promise.resolve(MC[mo]);
+  try{var raw=sessionStorage.getItem('obm:'+mo);if(raw&&!force){var o=JSON.parse(raw);if(Date.now()-o.t<120000){MC[mo]={days:o.days,slots:o.slots};}}}catch(e){}
+  var hit=MC[mo]&&!force;
+  var p=api('action=month&session=couple&month='+mo).then(function(r){
+    MC[mo]={days:r.days||{},slots:r.slots||null};
+    try{sessionStorage.setItem('obm:'+mo,JSON.stringify({t:Date.now(),days:MC[mo].days,slots:MC[mo].slots}))}catch(e){}
+    return MC[mo]});
+  if(hit)return Promise.resolve(MC[mo]);
+  MC[mo]={p:p};return p;
+}
+function useMonth(mo){var m=MC[mo];if(m&&m.days){S.days=m.days;S.loading=false}else{S.days={};S.loading=true}}
+function loadMonth(){
+  useMonth(S.month);paint();
+  var mo=S.month;
+  monthFetch(mo).then(function(){if(S.month===mo){useMonth(mo);paint()}}).catch(function(){S.loading=false;S.err='Could not load dates. Please try again.';paint()});
+  var p=mo.split('-'),n=new Date(+p[0],+p[1],1);monthFetch(n.getFullYear()+'-'+pad(n.getMonth()+1)).catch(function(){});
+}
 function saveF(){S.f={name:v('f-name'),email:v('f-email'),wa:v('f-wa'),lang:v('f-lang'),notes:v('f-notes')}}
 function v(id){var e=root.querySelector('#'+id);return e?e.value.trim():''}
 
@@ -242,11 +266,19 @@ function confirmPage(code){
   }).catch(function(){if(++tries<8)setTimeout(poll,2500)})})();
 }
 
-api('action=config').then(function(c){
+(function(){var t=new Date(),mo=t.getFullYear()+'-'+pad(t.getMonth()+1);
+  monthFetch(mo).catch(function(){});var n=new Date(t.getFullYear(),t.getMonth()+1,1);monthFetch(n.getFullYear()+'-'+pad(n.getMonth()+1)).catch(function(){});})();
+function start(c,fromCache){
   S.cfg=c;var q=new URLSearchParams(location.search).get('code');
   if(q){confirmPage(q);return}
-  paint();
-}).catch(function(){root.innerHTML='<div class="ob-card"><h2>Book your session</h2><p>The booking system is not available right now. Please message me on WhatsApp.</p></div>'});
+  if(!S.session)paint();
+}
+var cached=null;try{cached=JSON.parse(sessionStorage.getItem(CFGK)||'null')}catch(e){}
+if(cached)start(cached,true);
+api('action=config').then(function(c){
+  try{sessionStorage.setItem(CFGK,JSON.stringify(c))}catch(e){}
+  if(!cached)start(c,false);else S.cfg=c;
+}).catch(function(){if(!cached)root.innerHTML='<div class="ob-card"><h2>Book your session</h2><p>The booking system is not available right now. Please message me on WhatsApp.</p></div>'});
 })();
 </script>
 </div></section></main>
