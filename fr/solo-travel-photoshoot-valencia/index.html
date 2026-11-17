@@ -143,7 +143,7 @@ footer{background-image:var(--grainl);padding:90px 0 40px}footer h3{font-size:22
 #intro .ins{height:.8em;width:1.6em;border-radius:16px}#intro .ins img{display:block;border-radius:0}
 #intro .note{font-size:15px;opacity:.75;margin-top:22px}
 #intro .btn{background:var(--bone);color:var(--coffee);border-color:var(--bone);min-height:56px;padding:0 38px}
-#intro h2,#intro .btn,#intro .note{animation:up 1.4s cubic-bezier(.2,.6,.2,1) both}#intro h2{animation-delay:.15s}#intro .btn{animation-delay:.45s}#intro .note{animation-delay:.7s}
+#intro .wf,#intro .ins{opacity:0;animation:fade 1.9s ease forwards;animation-delay:calc(.5s + var(--i)*.5s)}@keyframes fade{to{opacity:1}}#intro .btn,#intro .note{opacity:0;animation:fade 1.6s ease forwards}#intro .btn{animation-delay:3.9s}#intro .note{animation-delay:4.4s}
 @media(max-width:860px){#intro .lg{height:44px}#intro .ins{border-radius:10px}}
 .intro .hero .wrap>*,.intro .hero>.slide.on{animation-play-state:paused}
 body #ob-booking{--bone:#EDE6D6;--bone2:#E4DBC7;--steel:#B8CADB;--coffee:#2B1F16;--mid:#6B5A4B;font-family:'Instrument Sans','Helvetica Neue',Arial,sans-serif}
