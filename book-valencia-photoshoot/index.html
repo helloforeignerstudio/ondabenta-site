@@ -137,7 +137,7 @@ function err(){return S.err?'<div class="ob-err" role="alert">'+esc(S.err)+'</di
 function view1(){
   var h='<div class="ob-card">'+bar()+'<h2>Choose your session</h2>';
   S.cfg.sessions.forEach(function(s){
-    h+='<button type="button" class="ob-opt" data-s="'+s.id+'" aria-pressed="'+(S.session&&S.session.id===s.id)+'"><b><span>'+esc(s.name)+'</span><span>€'+s.price+'</span></b><small>'+s.minutes+' min · '+(s.people.length>1?'up to '+s.people[s.people.length-1]+' people':s.people[0]+(s.people[0]>1?' people':' person'))+'</small></button>';
+    h+='<button type="button" class="ob-opt" data-s="'+s.id+'" aria-pressed="'+(S.session&&S.session.id===s.id)+'"><b><span>'+esc(s.name)+'</span><span>€'+s.price+' + VAT</span></b><small>'+s.minutes+' min · '+(s.people.length>1?'up to '+s.people[s.people.length-1]+' people':s.people[0]+(s.people[0]>1?' people':' person'))+'</small></button>';
   });
   if(S.session){
     h+='<span class="ob-label">Route</span><div class="ob-chips">';
@@ -184,12 +184,12 @@ function view3(){
 }
 
 function summary(){
-  return '<table class="ob-sum"><tr><td>'+esc(S.session.name)+'</td><td>€'+S.session.price+'</td></tr><tr><td>Date</td><td>'+esc(S.date)+' · '+esc(S.time)+'</td></tr><tr><td>Route</td><td>'+esc(S.route)+'</td></tr><tr><td>People</td><td>'+S.people+'</td></tr></table>';
+  return '<table class="ob-sum"><tr><td>'+esc(S.session.name)+'</td><td>€'+S.session.price+' + VAT</td></tr><tr><td>Total (VAT 21% incl.)</td><td><b>€'+S.session.total+'</b></td></tr><tr><td>Date</td><td>'+esc(S.date)+' · '+esc(S.time)+'</td></tr><tr><td>Route</td><td>'+esc(S.route)+'</td></tr><tr><td>People</td><td>'+S.people+'</td></tr></table>';
 }
 
 function view4(){
   return '<div class="ob-card">'+bar()+'<h2>Your time is held</h2><p style="line-height:1.5">I am holding this slot for '+S.cfg.holdMin+' minutes while you pay.</p>'+summary()+
-  '<div class="ob-row"><button class="ob-btn ghost" id="b4">Back</button><button class="ob-btn" id="n4">'+(S.busy?'One moment...':'Pay €'+S.session.price)+'</button></div>'+err()+'</div>';
+  '<div class="ob-row"><button class="ob-btn ghost" id="b4">Back</button><button class="ob-btn" id="n4">'+(S.busy?'One moment...':'Pay €'+S.session.total)+'</button></div>'+err()+'</div>';
 }
 
 function viewDone(r){
