@@ -165,6 +165,11 @@ body.home .tabs{background:none;border:0;box-shadow:none;-webkit-backdrop-filter
 @keyframes iexl{to{max-width:var(--wl)}}@keyframes iexr{to{max-width:var(--wr)}}
 @keyframes iexv{to{max-height:var(--hv)}}
 #intro .lg{opacity:0;animation:fade .8s ease .6s forwards}
+#intro .il-lang{position:absolute;top:clamp(22px,4.5vh,44px);left:clamp(18px,3vw,40px);z-index:4;display:flex;gap:4px 14px;flex-wrap:wrap;max-width:34vw;opacity:0;animation:fade .8s ease .9s forwards}
+#intro .il-lang button{background:none;border:0;padding:6px 0;color:var(--bone);opacity:.55;font-family:var(--mono);font-size:12px;letter-spacing:.12em;cursor:pointer;border-bottom:1px solid transparent;transition:opacity .25s,border-color .25s}
+#intro .il-lang button:hover{opacity:.9}#intro .il-lang button[aria-pressed=true]{opacity:1;border-bottom-color:currentColor}
+@media(max-width:700px){#intro .il-lang{max-width:30vw;gap:2px 10px}#intro .il-lang button{font-size:11px;padding:5px 0}}
+#intro .hd2 .tx.sw{transition:opacity .35s ease}
 @media(max-width:700px){#intro .hd2{flex-direction:column;font-size:11vw;--hv:3.4em;top:46%}
 #intro .hd2 .side.l,#intro .hd2 .side.r{max-width:none;max-height:0;width:92vw;justify-content:center;padding:0}
 #intro .hd2 .side.l{align-items:flex-start;animation:iexv 1.5s cubic-bezier(.4,0,.2,1) 1.1s forwards}#intro .hd2 .side.r{align-items:flex-end;animation:iexv 1.5s cubic-bezier(.4,0,.2,1) 1.1s forwards}
