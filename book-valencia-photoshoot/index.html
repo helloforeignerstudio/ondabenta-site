@@ -441,7 +441,7 @@ function wire(){
   var b3=root.querySelector('#b3');if(b3)b3.onclick=function(){saveF();S.step=2;paint()};
   var n3=root.querySelector('#n3');if(n3)n3.onclick=submit;
   var ca=root.querySelector('#cp-apply');if(ca)ca.onclick=applyCoupon;
-  var cf=root.querySelector('#f-coupon');if(cf)cf.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();applyCoupon()}};
+  var cf=root.querySelector('#f-coupon');if(cf){cf.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();applyCoupon()}};cf.oninput=function(){clearTimeout(cpTimer);S.cp=null;S.cpm='';cpShow();var c=cf.value.trim();if(c.length>=4)cpTimer=setTimeout(function(){checkCoupon(false)},450)};cf.onblur=function(){if(cf.value.trim())checkCoupon(true)}}
   var n4=root.querySelector('#n4');if(n4)n4.onclick=function(){if(S.checkout)location.href=S.checkout};
   var b4=root.querySelector('#b4');if(b4)b4.onclick=function(){S.step=3;paint()};
 }
@@ -466,15 +466,20 @@ function loadMonth(){
   monthFetch(mo).then(function(){if(S.month===mo){useMonth(mo);paint()}}).catch(function(){S.loading=false;S.err=t('e_dates');paint()});
   var p=mo.split('-'),n=new Date(+p[0],+p[1],1);monthFetch(n.getFullYear()+'-'+pad(n.getMonth()+1)).catch(function(){});
 }
-function applyCoupon(){
-  saveF();var code=S.f.coupon;
-  if(!code){S.cp=null;S.cpm='';paint();return}
-  var b=root.querySelector('#cp-apply');if(b)b.disabled=true;
-  api('action=coupon&session='+S.session.id+'&people='+S.people+'&code='+encodeURIComponent(code)).then(function(r){
-    if(r.ok){S.cp={code:r.code,total:r.total,discount:r.discount};S.cpm=''}else{S.cp=null;S.cpm=t('cp_bad')}
-    paint();
-  }).catch(function(){S.cp=null;S.cpm=t('e_conn');paint()});
+var cpTimer=null,cpSeq=0;
+function cpShow(){var m=root.querySelector('#cp-msg');if(!m)return;m.className='ob-cpmsg '+(S.cp?'ok':(S.cpm?'no':''));m.textContent=S.cp?t('cp_ok',{c:S.cp.code,d:fm(S.cp.discount)}):S.cpm}
+function checkCoupon(loud){
+  var inp=root.querySelector('#f-coupon'),code=((inp&&inp.value)||'').trim();
+  if(!code){S.cp=null;S.cpm='';cpShow();return Promise.resolve(true)}
+  if(S.cp&&S.cp.typed===code.toUpperCase().replace(/\s+/g,'')){return Promise.resolve(true)}
+  var my=++cpSeq;
+  return api('action=coupon&session='+S.session.id+'&people='+S.people+'&code='+encodeURIComponent(code)).then(function(r){
+    if(my!==cpSeq)return true;
+    if(r.ok){S.cp={code:r.code,total:r.total,discount:r.discount,typed:code.toUpperCase().replace(/\s+/g,'')};S.cpm='';cpShow();return true}
+    S.cp=null;S.cpm=loud?t('cp_bad'):'';cpShow();return false;
+  }).catch(function(){if(my===cpSeq){S.cp=null;S.cpm=loud?t('e_conn'):'';cpShow()}return false});
 }
+function applyCoupon(){saveF();return checkCoupon(true)}
 function saveF(){S.f={name:v('f-name'),email:v('f-email'),wa:v('f-wa'),notes:v('f-notes'),coupon:v('f-coupon')}}
 function v(id){var e=root.querySelector('#'+id);return e?e.value.trim():''}
 
@@ -482,6 +487,8 @@ function submit(){
   saveF();var ok=root.querySelector('#f-ok').checked;
   if(!S.f.name||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.f.email)||S.f.wa.replace(/\D/g,'').length<7){S.err=t('e_check');paint();return}
   if(!ok){S.err=t('e_tick');paint();return}
+  var cv=S.f.coupon;
+  if(cv&&!(S.cp&&S.cp.typed===cv.toUpperCase().replace(/\s+/g,''))){checkCoupon(true).then(function(okc){if(okc)submit();else{S.err=t('cp_bad');paint()}});return}
   S.err='';S.busy=true;S.checkout=null;S.step=4;paint();
   post({action:'hold',sessionId:S.session.id,date:S.date,time:S.time,route:S.route,people:S.people,name:S.f.name,email:S.f.email,whatsapp:S.f.wa,lang:LANG,notes:S.f.notes,consent:true,coupon:S.cp?S.cp.code:''}).then(function(r){
     S.busy=false;
