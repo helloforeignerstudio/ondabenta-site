@@ -325,6 +325,7 @@ function rN(r){return RK[r]?t(RK[r]):r}
 function sN(s){return t('n_'+s.id)}
 function totalFor(s,n){return s.perPerson?Math.round(s.price*(n||1)*121)/100:s.total}
 function fm(n){n=Math.round(n*100)/100;return n%1?n.toFixed(2):String(n)}
+function defP(x){return x.people.length===1?x.people[0]:(x.perPerson?null:x.people[x.people.length-1])}
 function payTotal(){return fm(S.cp?S.cp.total:totalFor(S.session,S.people))}
 function priceHTML(s){return s.perPerson?'<s class="ob-was">€'+s.regular+'</s> €'+s.price+' '+esc(t('pp_vat')):'€'+s.price+' '+esc(t('vat'))}
 function avKey(){return S.session&&S.session.id==='xmas'?'xmas':'couple'}
@@ -350,7 +351,7 @@ function view1(){
     h+='<span class="ob-label">'+esc(t('route'))+'</span><div class="ob-chips">';
     S.session.routes.forEach(function(r){h+='<button type="button" class="ob-chip" data-r="'+esc(r)+'" aria-pressed="'+(S.route===r)+'">'+esc(rN(r))+'</button>'});
     h+='</div>';
-    if(S.session.people.length>1){
+    if(S.session.people.length>1&&S.session.perPerson){
       h+='<span class="ob-label">'+esc(t('how_many'))+'</span><div class="ob-chips">';
       S.session.people.forEach(function(p){h+='<button type="button" class="ob-chip" data-p="'+p+'" aria-pressed="'+(S.people===p)+'">'+p+'</button>'});
       h+='</div>';
@@ -396,7 +397,7 @@ function summary(){
   return '<table class="ob-sum">'+
     r(esc(sN(S.session))+(S.session.perPerson?' × '+S.people:''),esc(fmtD(S.date))+' · '+esc(S.time))+
     r(esc(t('route')),esc(rN(S.route)))+
-    r(esc(t('people')),S.people)+
+    r(esc(t('people')),(S.session.people.length>1&&!S.session.perPerson)?esc(sN(S.session)):S.people)+
     r(esc(t('bd_price')),'€'+fm(nf))+
     (S.cp?r(esc(t('cp_line',{c:S.cp.code})),'−€'+fm(nf-np)):'')+
     (S.cp?r(esc(t('bd_sub')),'€'+fm(np)):'')+
@@ -416,7 +417,7 @@ function viewDone(r){
   var sess=r.sessionId?sNameById(r.sessionId,r.session):(r.session||'');
   return '<div class="ob-card"><h2>'+esc(t('booked'))+'</h2><p style="line-height:1.5">'+t('thanks',{n:nm})+'</p>'+
   '<div class="ob-code"><span class="ob-label" style="margin:0">'+esc(t('code'))+'</span><div>'+esc(r.code)+'</div></div>'+
-  '<table class="ob-sum"><tr><td>'+esc(sess)+'</td><td>'+esc(rN(r.route))+'</td></tr><tr><td>'+esc(t('when'))+'</td><td>'+esc(fmtD(r.date))+' · '+esc(r.time)+' ('+esc(t('valencia'))+')</td></tr><tr><td>'+esc(t('people'))+'</td><td>'+esc(r.people)+'</td></tr></table>'+
+  '<table class="ob-sum"><tr><td>'+esc(sess)+'</td><td>'+esc(rN(r.route))+'</td></tr><tr><td>'+esc(t('when'))+'</td><td>'+esc(fmtD(r.date))+' · '+esc(r.time)+' ('+esc(t('valencia'))+')</td></tr><tr><td>'+esc(t('people'))+'</td><td>'+(r.sessionId==='family'?esc(sNameById('family',r.session)):esc(r.people))+'</td></tr></table>'+
   '<p style="font-size:14px;line-height:1.5">'+esc(t('meeting'))+'</p>'+
   '<div class="ob-row"><a class="ob-btn" style="text-decoration:none;display:inline-block" href="https://wa.me/'+S.cfg.whatsapp+'?text='+encodeURIComponent(r.code)+'">'+esc(t('wa_me'))+'</a></div></div>';
 }
@@ -428,7 +429,7 @@ function paint(){
 
 function wire(){
   function on(sel,ev,fn){var els=root.querySelectorAll(sel);for(var i=0;i<els.length;i++)els[i].addEventListener(ev,fn)}
-  on('[data-s]','click',function(){var id=this.getAttribute('data-s');S.session=S.cfg.sessions.filter(function(x){return x.id===id})[0];S.route=S.session.routes.length===1?S.session.routes[0]:null;S.people=S.session.people.length===1?S.session.people[0]:null;S.cp=null;S.cpm='';S.date=null;S.time=null;S.err='';paint()});
+  on('[data-s]','click',function(){var id=this.getAttribute('data-s');S.session=S.cfg.sessions.filter(function(x){return x.id===id})[0];S.route=S.session.routes.length===1?S.session.routes[0]:null;S.people=defP(S.session);S.cp=null;S.cpm='';S.date=null;S.time=null;S.err='';paint()});
   on('[data-r]','click',function(){S.route=this.getAttribute('data-r');paint()});
   on('[data-p]','click',function(){S.people=+this.getAttribute('data-p');S.cp=null;S.cpm='';paint()});
   var n1=root.querySelector('#n1');if(n1)n1.onclick=function(){S.err='';var d=new Date();S.month=d.getFullYear()+'-'+pad(d.getMonth()+1);S.step=2;loadMonth()};
@@ -513,7 +514,7 @@ function start(c){
   S.cfg=c;var q=new URLSearchParams(location.search).get('code');
   if(q){confirmPage(q);return}
   var sq=new URLSearchParams(location.search).get('session');
-  if(sq&&!S.session){var ps=c.sessions.filter(function(x){return x.id===sq})[0];if(ps){S.session=ps;S.route=ps.routes.length===1?ps.routes[0]:null;var rq=new URLSearchParams(location.search).get('route');if(rq&&ps.routes.indexOf(rq)>=0)S.route=rq;S.people=ps.people.length===1?ps.people[0]:null}}
+  if(sq&&!S.session){var ps=c.sessions.filter(function(x){return x.id===sq})[0];if(ps){S.session=ps;S.route=ps.routes.length===1?ps.routes[0]:null;var rq=new URLSearchParams(location.search).get('route');if(rq&&ps.routes.indexOf(rq)>=0)S.route=rq;S.people=defP(ps)}}
   if(!S.session||S.step===1)paint();
 }
 var cached=null;try{cached=JSON.parse(sessionStorage.getItem(CFGK)||'null')}catch(e){}
