@@ -63,7 +63,7 @@ function done(code){
    if(r.mode==='self')h+='<p>'+esc(T.d_ok_self)+'</p><div class="gv-code">'+esc(r.voucherCode||code)+'</div><p class="gv-note">'+esc(r.session)+' · €'+fm(r.value)+' · '+esc(fill(T.d_valid,{d:dmy(r.expires)}))+'</p>';
    else{var now=String(r.sendOn).slice(0,10)<=today();h+='<p>'+esc(fill(now?T.d_ok_direct_now:T.d_ok_direct_later,{r:r.recipient,d:dmy(r.sendOn)}))+'</p><p class="gv-note">'+esc(r.session)+' · €'+fm(r.value)+' · '+esc(fill(T.d_valid,{d:dmy(r.expires)}))+'</p>'}
    h+='<p style="margin-top:20px"><a class="gv-btn" href="'+GV.pre+'/book-valencia-photoshoot/">'+esc(T.book)+'</a></p></div>';
-   root.innerHTML=h;var t=document.getElementById('gv-terms');if(t)t.style.display='none';
+   root.innerHTML=h;var t=document.getElementById('gv-terms');if(t)t.style.display='none';var hw=document.getElementById('gv-how');if(hw)hw.style.display='none';
   }).catch(function(){root.innerHTML='<div class="gv-card"><p>'+esc(T.errc)+'</p></div>'});
  })();
 }
