@@ -14,7 +14,7 @@ function readF(){['name','email','rName','rEmail','message','sender','taxName','
 function paint(){
  var s=sess(),h='';
  h+='<div class="gv-card"><h2>'+esc(T.s1)+'</h2>';
- S.cfg.sessions.forEach(function(x){var pr=x.perPerson?('€'+fm(Math.round(x.price*121)/100)+' '+T.pp):('€'+fm(x.total));h+='<button type="button" class="gv-opt" data-s="'+x.id+'" aria-pressed="'+(S.sid===x.id)+'"><b>'+esc(nm(x))+'</b><small>'+esc(pr)+'</small></button>'});
+ S.cfg.sessions.slice().sort(function(a,b){return (b.perPerson?1:0)-(a.perPerson?1:0)}).forEach(function(x){var pr=x.perPerson?('<s class="gv-was">€'+x.regular+'</s> €'+x.price+' '+esc(T.pp_vat)):('€'+x.price+' '+esc(T.vat));var ppl=x.people.length>1?fill(T.up_to,{n:x.people[x.people.length-1]}):(x.people[0]>1?fill(T.people_n,{n:x.people[0]}):T.person);h+='<button type="button" class="gv-opt" data-s="'+x.id+'" aria-pressed="'+(S.sid===x.id)+'"><b><span>'+esc(nm(x))+(x.perPerson?' <i class="gv-badge">'+esc(T.xmas_deal)+'</i>':'')+'</span><span>'+pr+'</span></b><small>'+(x.minutes===60?'1 h':x.minutes+' min')+' · '+esc(ppl)+(x.perPerson?' · '+esc(T.xmas_season):'')+'</small></button>'});
  if(s&&s.people.length>1){h+='<label>'+esc(T.people)+'</label><div class="gv-chips">';s.people.forEach(function(p){h+='<button type="button" class="gv-chip" data-p="'+p+'" aria-pressed="'+(S.people===p)+'">'+p+'</button>'});h+='</div>'}
  h+='<p class="gv-note">'+esc(T.note_any)+'</p></div>';
  h+='<div class="gv-card"><h2>'+esc(T.s2)+'</h2>';
